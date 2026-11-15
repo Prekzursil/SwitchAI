@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Certificate pinning for the updater's api.github.com calls.
+
+  Pins are base64(SHA-256(SubjectPublicKeyInfo DER)) of the leaf
+  certificate (*.github.com, rotated routinely by GitHub) and the two
+  Sectigo intermediate CA keys currently serving the chain; pinning the
+  CA keys keeps the app working across leaf rotations. Captured
+  2026-11-15 — refresh here if GitHub ever changes CA.
+
+  Applies to the platform network stack (HttpsURLConnection included).
+  Pin failure surfaces as a normal SSL error to the updater's existing
+  error handling; there is no fallback that bypasses the pins.
+-->
+<network-security-config>
+    <domain-config>
+        <domain includeSubdomains="false">api.github.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">P5437A6f5e2OnunPOzNhRV2iWeOE1XGTN9xskQ53yTk=</pin>
+            <!-- Sectigo intermediates (survive leaf rotation) -->
+            <pin digest="SHA-256">ZSagvDzjltLkewXEBuDxIzpW/dpVw1Juvvmd0hhkzdY=</pin>
+            <pin digest="SHA-256">sLVjNUaFYfW7n6EtgBeEpjOlcnBdNPMrZDRF36iwBdE=</pin>
+        </pin-set>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>
