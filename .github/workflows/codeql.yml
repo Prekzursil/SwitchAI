@@ -45,8 +45,8 @@ jobs:
           # app/build contains AGP-generated sources (view bindings, etc.)
           # regenerated on every build; they are not repository code.
           config: |
-            paths_exclude:
-              - /app/build
+            paths_ignore:
+              - app/build/**
 
       - name: Build
         run: ./gradlew assembleDebug --no-daemon
