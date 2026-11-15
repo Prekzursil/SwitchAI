@@ -32,7 +32,7 @@
         app:iconSpaceReserved="false"
         app:summary="@string/pref_selector_components_summary" />
 
-    <com.wstxda.switchai.preference.MultiSelectListPreference
+    <com.wstxda.switchai.preference.MaterialMultiSelectListPreference
         android:dependency="assistant_selector"
         android:entries="@array/assistant_entries"
         android:entryValues="@array/assistant_values"
