@@ -46,7 +46,7 @@ jobs:
           # regenerated on every build; they are not repository code.
           config: |
             paths-ignore:
-              - app/build/**
+              - app/build
 
       - name: Build
         run: ./gradlew assembleDebug --no-daemon
