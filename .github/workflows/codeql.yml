@@ -37,8 +37,9 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: security-extended, security-and-quality
-          paths-ignore:
-            - app/build
+          config: |
+            paths-ignore:
+              - app/build
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
