@@ -21,20 +21,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # build-mode none: no Gradle build runs during analysis, so
+          # AGP-generated sources (app/build, not repository code) never
+          # exist on disk for the extractor to pick up. The full compile,
+          # lint and unit-test suite runs in android.yml beside this.
           - language: java-kotlin
-            build-mode: manual
+            build-mode: none
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set Up JDK 22
-        uses: actions/setup-java@v4
-        with:
-          java-version: '22'
-          distribution: 'oracle'
-
-      - name: Set Executable Permission for Gradle Wrapper
-        run: chmod +x gradlew
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
@@ -42,14 +37,8 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: security-extended, security-and-quality
-          # app/build contains AGP-generated sources (view bindings, etc.)
-          # regenerated on every build; they are not repository code.
-          config: |
-            paths-ignore:
-              - app/build
-
-      - name: Build
-        run: ./gradlew assembleDebug --no-daemon
+          paths-ignore:
+            - app/build
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
