@@ -6,7 +6,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.preference.MultiSelectListPreference
 import com.wstxda.switchai.R
 
-class MultiSelectListPreference @JvmOverloads constructor(
+class MaterialMultiSelectListPreference @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ) : MultiSelectListPreference(context, attrs) {

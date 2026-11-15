@@ -5,12 +5,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceDialogFragmentCompat
 import com.wstxda.switchai.R
-import com.wstxda.switchai.preference.MultiSelectListPreference
+import com.wstxda.switchai.preference.MaterialMultiSelectListPreference
 import com.wstxda.switchai.utils.Constants
 
 class AssistantManagerDialog : PreferenceDialogFragmentCompat() {
 
-    private lateinit var pref: MultiSelectListPreference
+    private lateinit var pref: MaterialMultiSelectListPreference
     private val currentSelections = HashSet<String>()
     private var toastShownForInvalidSelection = false
 
@@ -23,7 +23,7 @@ class AssistantManagerDialog : PreferenceDialogFragmentCompat() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        pref = preference as MultiSelectListPreference
+        pref = preference as MaterialMultiSelectListPreference
 
         currentSelections.clear()
         val restored = savedInstanceState?.getStringArray(Constants.ASSISTANT_MANAGER_DIALOG)
