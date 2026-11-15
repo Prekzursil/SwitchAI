@@ -10,7 +10,6 @@ import androidx.core.net.toUri
 import com.google.android.material.snackbar.Snackbar
 import com.wstxda.switchai.R
 import com.wstxda.switchai.utils.Constants
-import com.wstxda.switchai.utils.GithubPinnedHttps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,9 +50,9 @@ object UpdaterService {
     }
 
     private suspend fun fetchLatestVersion(): String = withContext(Dispatchers.IO) {
-        val connection = GithubPinnedHttps.openConnection(URL(Constants.GITHUB_RELEASE_URL))
-        val jsonString = connection.inputStream.bufferedReader().use { it.readText() }
-        connection.disconnect()
+        // Certificate pinning for api.github.com is enforced by
+        // res/xml/network_security_config.xml (platform network stack).
+        val jsonString = URL(Constants.GITHUB_RELEASE_URL).readText()
         val jsonObject = JSONObject(jsonString)
         jsonObject.optString("tag_name").removePrefix("v")
     }
