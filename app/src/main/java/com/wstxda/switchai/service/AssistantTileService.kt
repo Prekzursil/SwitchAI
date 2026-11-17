@@ -1,12 +1,11 @@
 package com.wstxda.switchai.service
 
-import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.service.quicksettings.TileServiceCompat
 import com.wstxda.switchai.R
 import com.wstxda.switchai.logic.DigitalAssistantChecker
 import com.wstxda.switchai.logic.PreferenceHelper
@@ -28,20 +27,12 @@ class AssistantTileService : TileService() {
         refreshTileContent()
     }
 
-    @SuppressLint("StartActivityAndCollapseDeprecated")
     override fun onClick() {
         val intent = Intent(this, DigitalAssistantService::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            val pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-            )
-            startActivityAndCollapse(pendingIntent)
-        } else {
-            @Suppress("DEPRECATION") startActivityAndCollapse(intent)
-        }
+        TileServiceCompat.startActivityAndCollapse(this, intent)
     }
 
     private fun refreshTileContent() {

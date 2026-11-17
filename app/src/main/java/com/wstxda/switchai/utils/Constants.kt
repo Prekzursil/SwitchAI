@@ -128,10 +128,11 @@ object Constants {
     const val GRID_COLUMNS_DIALOG = "GridColumnsDialog"
 
     // -------------------------------------------------------------------------
-    // Assistant widget
+    // Fragment results
     // -------------------------------------------------------------------------
 
-    const val ACTION_ASSISTANT_SELECTED = "com.wstxda.switchai.ACTION_ASSISTANT_SELECTED"
+    const val ASSISTANT_MANAGER_DIALOG_RESULT = "assistant_manager_dialog_result"
+    const val EXTRA_SELECTED_ASSISTANTS = "selected_assistants"
 
     // -------------------------------------------------------------------------
     // SharedPreferences

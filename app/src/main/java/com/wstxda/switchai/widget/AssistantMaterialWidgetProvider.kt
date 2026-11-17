@@ -13,7 +13,6 @@ import com.wstxda.switchai.logic.PreferenceHelper
 import com.wstxda.switchai.service.AssistantService
 import com.wstxda.switchai.ui.utils.AssistantResourcesManager
 import com.wstxda.switchai.utils.Constants
-import com.wstxda.switchai.widget.utils.WidgetAssistantListService
 
 class AssistantMaterialWidgetProvider : AppWidgetProvider() {
 
@@ -32,40 +31,13 @@ class AssistantMaterialWidgetProvider : AppWidgetProvider() {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     }
 
-    override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Constants.ACTION_ASSISTANT_SELECTED) {
-            val selectedAssistant =
-                intent.getStringExtra(Constants.DIGITAL_ASSISTANT_SELECT_PREF_KEY)
-            val appWidgetId = intent.getIntExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
-            )
-
-            if (selectedAssistant != null && appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                val preferenceHelper = PreferenceHelper(context)
-                preferenceHelper.putString(
-                    Constants.DIGITAL_ASSISTANT_SELECT_PREF_KEY, selectedAssistant
-                )
-
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                updateWidget(context, appWidgetManager, appWidgetId)
-                @Suppress("DEPRECATION") appWidgetManager.notifyAppWidgetViewDataChanged(
-                    appWidgetId, R.id.assistant_list
-                )
-            }
-        }
-        super.onReceive(context, intent)
-    }
-
     private fun updateWidget(
         context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int,
     ) {
         val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
         val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-//        val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
 
         val layoutId = when {
-            // TODO: Need create logic for tall widget assistant list click action, current do nothing. so it's disabled for now
-//            minHeight >= 100 -> R.layout.widget_assistant_material_tall
             minWidth < 150 -> R.layout.widget_assistant_material_small
             minWidth >= 300 -> R.layout.widget_assistant_material_wide
             else -> R.layout.widget_assistant_material_default
@@ -85,8 +57,6 @@ class AssistantMaterialWidgetProvider : AppWidgetProvider() {
         )
 
         setupClickIntents(context, appWidgetId, views)
-
-        setupAssistantList(context, appWidgetManager, appWidgetId, views, layoutId)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
@@ -114,34 +84,5 @@ class AssistantMaterialWidgetProvider : AppWidgetProvider() {
 
         views.setOnClickPendingIntent(R.id.button_assistant, assistantPendingIntent)
         views.setOnClickPendingIntent(R.id.button_assistant_select, selectorPendingIntent)
-    }
-
-    private fun setupAssistantList(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetId: Int,
-        views: RemoteViews,
-        layoutId: Int,
-    ) {
-
-        if (layoutId == R.layout.widget_assistant_material_tall) {
-            val serviceIntent = Intent(context, WidgetAssistantListService::class.java)
-            @Suppress("DEPRECATION") views.setRemoteAdapter(R.id.assistant_list, serviceIntent)
-
-            val clickIntent = Intent(context, AssistantMaterialWidgetProvider::class.java).apply {
-                action = Constants.ACTION_ASSISTANT_SELECTED
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-            }
-            val clickPendingIntent = PendingIntent.getBroadcast(
-                context,
-                appWidgetId,
-                clickIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            views.setPendingIntentTemplate(R.id.assistant_list, clickPendingIntent)
-            @Suppress("DEPRECATION") appWidgetManager.notifyAppWidgetViewDataChanged(
-                appWidgetId, R.id.assistant_list
-            )
-        }
     }
 }
