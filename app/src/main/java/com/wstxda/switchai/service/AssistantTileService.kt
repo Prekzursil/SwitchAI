@@ -1,10 +1,11 @@
 package com.wstxda.switchai.service
 
+import android.app.PendingIntent
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import androidx.core.app.PendingIntentCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.service.quicksettings.PendingIntentActivityWrapper
 import androidx.core.service.quicksettings.TileServiceCompat
@@ -29,6 +30,10 @@ class AssistantTileService : TileService() {
         refreshTileContent()
     }
 
+    // PendingIntentActivityWrapper's flags parameter is annotated
+    // @PendingIntentCompat.Flags, which accepts FLAG_IMMUTABLE; lint's
+    // WrongConstant constant list does not include it.
+    @SuppressLint("WrongConstant")
     override fun onClick() {
         val intent = Intent(this, DigitalAssistantService::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -37,7 +42,7 @@ class AssistantTileService : TileService() {
         TileServiceCompat.startActivityAndCollapse(
             this,
             PendingIntentActivityWrapper(
-                this, 0, intent, PendingIntentCompat.FLAG_IMMUTABLE, false
+                this, 0, intent, PendingIntent.FLAG_IMMUTABLE, false
             )
         )
     }
