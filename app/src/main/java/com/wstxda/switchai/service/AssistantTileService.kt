@@ -1,10 +1,10 @@
 package com.wstxda.switchai.service
 
-import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import androidx.core.app.PendingIntentCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.service.quicksettings.PendingIntentActivityWrapper
 import androidx.core.service.quicksettings.TileServiceCompat
@@ -37,7 +37,7 @@ class AssistantTileService : TileService() {
         TileServiceCompat.startActivityAndCollapse(
             this,
             PendingIntentActivityWrapper(
-                this, 0, intent, PendingIntent.FLAG_IMMUTABLE, false
+                this, 0, intent, PendingIntentCompat.FLAG_IMMUTABLE, false
             )
         )
     }

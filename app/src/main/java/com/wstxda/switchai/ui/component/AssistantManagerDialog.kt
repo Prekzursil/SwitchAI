@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.wstxda.switchai.R
 import com.wstxda.switchai.utils.Constants
@@ -46,14 +45,14 @@ class AssistantManagerDialog : DialogFragment() {
             minSelection: Int,
             maxSelection: Int,
         ) = AssistantManagerDialog().apply {
-            arguments = bundleOf(
-                ARG_TITLE to title,
-                ARG_ENTRIES to entries,
-                ARG_ENTRY_VALUES to entryValues,
-                ARG_SELECTED to ArrayList(selected),
-                ARG_MIN_SELECTION to minSelection,
-                ARG_MAX_SELECTION to maxSelection,
-            )
+            arguments = Bundle().apply {
+                putCharSequence(ARG_TITLE, title)
+                putCharSequenceArray(ARG_ENTRIES, entries)
+                putCharSequenceArray(ARG_ENTRY_VALUES, entryValues)
+                putStringArrayList(ARG_SELECTED, ArrayList(selected))
+                putInt(ARG_MIN_SELECTION, minSelection)
+                putInt(ARG_MAX_SELECTION, maxSelection)
+            }
         }
     }
 
@@ -142,7 +141,11 @@ class AssistantManagerDialog : DialogFragment() {
     private fun saveSelections() {
         parentFragmentManager.setFragmentResult(
             Constants.ASSISTANT_MANAGER_DIALOG_RESULT,
-            bundleOf(Constants.EXTRA_SELECTED_ASSISTANTS to ArrayList(currentSelections))
+            Bundle().apply {
+                putStringArrayList(
+                    Constants.EXTRA_SELECTED_ASSISTANTS, ArrayList(currentSelections)
+                )
+            }
         )
         dismiss()
     }
