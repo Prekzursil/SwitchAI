@@ -1,10 +1,12 @@
 package com.wstxda.switchai.service
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.service.quicksettings.PendingIntentActivityWrapper
 import androidx.core.service.quicksettings.TileServiceCompat
 import com.wstxda.switchai.R
 import com.wstxda.switchai.logic.DigitalAssistantChecker
@@ -32,7 +34,12 @@ class AssistantTileService : TileService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        TileServiceCompat.startActivityAndCollapse(this, intent)
+        TileServiceCompat.startActivityAndCollapse(
+            this,
+            PendingIntentActivityWrapper(
+                this, 0, intent, PendingIntent.FLAG_IMMUTABLE, false
+            )
+        )
     }
 
     private fun refreshTileContent() {
